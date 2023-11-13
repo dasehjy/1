@@ -1,0 +1,44 @@
+create database homework;
+use homework;
+
+-- 创建user表
+create table user(
+id int primary key,
+name varchar(20),
+sex char(3),
+age tinyint,
+phone char(11)
+);
+
+-- 查询20-30岁的人
+select * from user where age <= 30 AND age >= 20;
+ 
+-- 删除包含“张”的用户
+delete from user where name like '&张&';
+
+-- 求平均年龄
+select avg(age) from user;
+
+-- 查询年龄20-30，名字包含“张”的用户并按年龄从小到大输出
+select * from user where age>=20 and age<=30 and name like '%张%' order by age asc;
+
+-- 新建两张表team，score
+create table team(
+id int primary key auto_increment,
+teamName varchar(20)
+);
+
+create table score(
+id int,
+teamid int,
+userid int,
+score int,
+);
+alter table score add constraint team_k foreign key (teamid) references team (id);
+alter table score add constraint user_k foreign key (userid) references user (id);
+
+-- 查询teamname为ecnu，年龄小于20的用户
+select user.* from user,team,score where team.teamName='ECNU' and team.id=score.teamid and score.userid=user.id and user.age<20;
+
+-- 求ecnu队总分
+select sum(IFNULL(score.score,0)) from team,score where team.teamName='ECNU' and team.id=score.teamid;
